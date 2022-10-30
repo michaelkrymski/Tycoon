@@ -41,11 +41,11 @@ public class BuildingData : ScriptableObject
         {
             case Dir.North:
                 return 0;
-            case Dir.East:
+            case Dir.West:
                 return 90;
             case Dir.South:
                 return 180;
-            case Dir.West:
+            case Dir.East:
                 return 270;
             default:
                 return 0;
@@ -69,7 +69,7 @@ public class BuildingData : ScriptableObject
         }
     }
 
-    public List<Vector2Int> GetGridPositionList(Vector2Int offset, Dir dir, int width, int height)
+    public List<Vector2Int> GetGridPositionList(Vector2Int offset, Dir dir, int gridWidth, int gridHeight)
     {
         List<Vector2Int> gridPositionList = new List<Vector2Int>();
         Vector2Int rotationOffset = GetRotationOffset(dir);
@@ -82,12 +82,9 @@ public class BuildingData : ScriptableObject
         }
         foreach(Vector2Int position in gridPositionList)
         {
-            if(position.x > width || -position.y > height)
-            {
-                Vector2Int vector = new Vector2Int(-1, -1);
-                List<Vector2Int> list = new List<Vector2Int>();
-                list[0] = vector;
-                return list;
+            if(position.x > gridWidth - (width - 1) || position.y > gridHeight - (height - 1))
+            {   
+                return new List<Vector2Int>(){new Vector2Int(-1, -1)};
             }
         }
         return gridPositionList;

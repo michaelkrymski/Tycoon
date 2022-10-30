@@ -8,6 +8,7 @@ public class GridBuilder : MonoBehaviour
 {
     [SerializeField] BuildingData building;
     private Grid<GridObject> grid;
+    private BuildingData.Dir dir = default;
 
     void Start()
     {
@@ -19,7 +20,7 @@ public class GridBuilder : MonoBehaviour
         private int x;
         private int y;
         private Grid<GridObject> grid;
-        private Transform currentObject;
+        private PlacedObject placedObject;
 
         public GridObject(int x, int y, Grid<GridObject> grid)
         {
@@ -28,26 +29,31 @@ public class GridBuilder : MonoBehaviour
             this.grid = grid;
         }
 
-        public override string ToString()
+        public PlacedObject GetPlacedObject()
         {
-            return x + ", " + y + "\n" + currentObject;
+            return placedObject;
         }
 
-        public void SetObject(Transform obj)
+        public override string ToString()
         {
-            currentObject = obj;
+            return x + ", " + y + "\n" + placedObject;
+        }
+
+        public void SetObject(PlacedObject placedObject)
+        {
+            this.placedObject = placedObject;
             grid.TriggerUpdate(x, y);
         }
         
         public void ClearObject()
         {
-            currentObject = null;
+            placedObject = null;
             grid.TriggerUpdate(x, y);
         }
 
         public bool CanBuild()
         {
-            return currentObject == null;
+            return placedObject == null;
         }
     }
 
@@ -55,24 +61,70 @@ public class GridBuilder : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(0))
         {
-            grid.GetXY(UtilsClass.GetMouseWorldPosition(), out int x, out int y);
-            Vector3 pos = grid.GetWorldPosition(x, y);
-            GridObject gridObject = grid.GetGridObject(x, y);
-            List<Vector2Int> list = building.GetGridPositionList(new Vector2Int(x, y), default, grid.GetWidth(), grid.GetHeight());
-            if(gridObject != null)
+            Build();
+        }
+
+        if(Input.GetMouseButtonDown(1))
+        {
+            Delete();
+        }
+
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            dir = BuildingData.GetNextDir(dir);
+        }
+    }
+
+    private void Build()
+    {
+        grid.GetXY(UtilsClass.GetMouseWorldPosition(), out int x, out int y);
+        Vector3 pos = grid.GetWorldPosition(x, y);
+        GridObject gridObject = grid.GetGridObject(x, y);
+        List<Vector2Int> list = building.GetGridPositionList(new Vector2Int(x, y), dir, grid.GetWidth(), grid.GetHeight());
+
+        if(list[0].x < 0 || list[0].y < 0)
+        {
+            UtilsClass.CreateWorldTextPopup("Can't build here!", UtilsClass.GetMouseWorldPosition());
+            return;
+        }
+
+        foreach(Vector2Int coordinate in list)
+        {
+            if(!grid.GetGridObject(coordinate.x, coordinate.y).CanBuild())
             {
-                if(gridObject.CanBuild())
+                UtilsClass.CreateWorldTextPopup("Can't build here!", UtilsClass.GetMouseWorldPosition());
+                return;
+            }
+        }
+
+        if(gridObject != null)
+        {
+            if(gridObject.CanBuild())
+            {
+                PlacedObject placedObject = PlacedObject.Create(pos + new Vector3(building.GetRotationOffset(dir).x, building.GetRotationOffset(dir).y, 0), new Vector2Int(x, y), dir, building, 10, 10);
+                foreach(Vector2Int tile in list)
                 {
-                    Transform obj = Instantiate(building.buildingPrefab, pos, Quaternion.identity);
-                    foreach(Vector2Int tile in list)
-                    {
-                        grid.GetGridObject(tile.x, tile.y).SetObject(obj);
-                    }
+                    grid.GetGridObject(tile.x, tile.y).SetObject(placedObject);
                 }
-                else
-                {
-                    UtilsClass.CreateWorldTextPopup("Can't build here!", UtilsClass.GetMouseWorldPosition());
-                }
+            }
+            else
+            {
+                UtilsClass.CreateWorldTextPopup("Can't build here!", UtilsClass.GetMouseWorldPosition());
+            }
+        }
+    }
+
+    private void Delete()
+    {
+        GridObject gridObject = grid.GetGridObject(UtilsClass.GetMouseWorldPosition());
+        PlacedObject placedObject = gridObject.GetPlacedObject();
+        if(placedObject != null)
+        {
+            placedObject.DestroySelf();
+            List<Vector2Int> list = placedObject.GetGridPositionList();
+            foreach(Vector2Int tile in list)
+            {
+                grid.GetGridObject(tile.x, tile.y).ClearObject();
             }
         }
     }
