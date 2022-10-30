@@ -69,7 +69,7 @@ public class BuildingData : ScriptableObject
         }
     }
 
-    public List<Vector2Int> GetGridPositionList(Vector2Int offset, Dir dir)
+    public List<Vector2Int> GetGridPositionList(Vector2Int offset, Dir dir, int width, int height)
     {
         List<Vector2Int> gridPositionList = new List<Vector2Int>();
         Vector2Int rotationOffset = GetRotationOffset(dir);
@@ -78,6 +78,16 @@ public class BuildingData : ScriptableObject
             for (int y = 0; y < height; y++)
             {
                 gridPositionList.Add(new Vector2Int(x, y) + offset - rotationOffset);
+            }
+        }
+        foreach(Vector2Int position in gridPositionList)
+        {
+            if(position.x > width || -position.y > height)
+            {
+                Vector2Int vector = new Vector2Int(-1, -1);
+                List<Vector2Int> list = new List<Vector2Int>();
+                list[0] = vector;
+                return list;
             }
         }
         return gridPositionList;

@@ -58,11 +58,16 @@ public class GridBuilder : MonoBehaviour
             grid.GetXY(UtilsClass.GetMouseWorldPosition(), out int x, out int y);
             Vector3 pos = grid.GetWorldPosition(x, y);
             GridObject gridObject = grid.GetGridObject(x, y);
+            List<Vector2Int> list = building.GetGridPositionList(new Vector2Int(x, y), default, grid.GetWidth(), grid.GetHeight());
             if(gridObject != null)
             {
                 if(gridObject.CanBuild())
                 {
-                    gridObject.SetObject(Instantiate(building.buildingPrefab, pos, Quaternion.identity));
+                    Transform obj = Instantiate(building.buildingPrefab, pos, Quaternion.identity);
+                    foreach(Vector2Int tile in list)
+                    {
+                        grid.GetGridObject(tile.x, tile.y).SetObject(obj);
+                    }
                 }
                 else
                 {
