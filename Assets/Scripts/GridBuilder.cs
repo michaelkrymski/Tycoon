@@ -90,7 +90,12 @@ public class GridBuilder : MonoBehaviour
         buildMode = !buildMode;
         if(buildMode)
         {
-            grid.CreateGridLines();
+            grid.CreateGridLines(5);
+        }
+        else
+        {
+            grid.DestroyGridLines();
+            HoverEffect.Instance.DestroyHoverEffect();
         }
     }
 
