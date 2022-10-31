@@ -9,6 +9,7 @@ public class GridBuilder : MonoBehaviour
     [SerializeField] BuildingData building;
     private Grid<GridObject> grid;
     private BuildingData.Dir dir = default;
+    private bool buildMode;
 
     void Start()
     {
@@ -59,22 +60,38 @@ public class GridBuilder : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetKeyDown(KeyCode.B))
         {
-            Build();
+            ToggleBuildMode();
         }
-
-        if(Input.GetMouseButtonDown(1))
+        if(buildMode)
         {
-            Delete();
-        }
+            if(Input.GetMouseButtonDown(0))
+            {
+                Build();
+            }
 
-        if(Input.GetKeyDown(KeyCode.R))
+            if(Input.GetMouseButtonDown(1))
+            {
+                Delete();
+            }
+
+            if(Input.GetKeyDown(KeyCode.R))
+            {
+                dir = BuildingData.GetNextDir(dir);
+            }
+
+            SetHoverEffect();
+        }
+    }
+
+    private void ToggleBuildMode()
+    {
+        buildMode = !buildMode;
+        if(buildMode)
         {
-            dir = BuildingData.GetNextDir(dir);
+            grid.CreateGridLines();
         }
-
-        SetHoverEffect();
     }
 
     void LateUpdate()
@@ -160,11 +177,20 @@ public class GridBuilder : MonoBehaviour
         }
         else
         {
-            // Vector3 pos = grid.GetWorldPosition(x, y) + new Vector3(building.GetRotationOffset(dir).x, building.GetRotationOffset(dir).y, 0) * grid.GetCellSize();
             // HoverEffect.Instance.RefreshHoverEffect(building.buildingPrefab, pos, Quaternion.Euler(0, 0, building.GetRotationAngle(dir)));
-            Vector3 currentPos = HoverEffect.Instance.ReturnPosition();
-            Vector3 pos = grid.GetWorldPosition(x, y) + new Vector3(building.GetRotationOffset(dir).x, building.GetRotationOffset(dir).y, 0) * grid.GetCellSize();
-            //Vector3.Lerp();
+            if(HoverEffect.Instance.ReturnPosition() == Vector3.zero)
+            {
+                Vector3 firstPos = grid.GetWorldPosition(x, y) + new Vector3(building.GetRotationOffset(dir).x, building.GetRotationOffset(dir).y, 0) * grid.GetCellSize();
+                HoverEffect.Instance.RefreshHoverEffect(building.buildingPrefab, firstPos, Quaternion.Euler(0, 0, building.GetRotationAngle(dir)));
+            }
+            else
+            {
+                Vector3 currentPos = HoverEffect.Instance.ReturnPosition();
+                Vector3 pos = grid.GetWorldPosition(x, y) + new Vector3(building.GetRotationOffset(dir).x, building.GetRotationOffset(dir).y, 0) * grid.GetCellSize();
+                HoverEffect.Instance.SetPosition(Vector3.Lerp(currentPos, pos, 0.1f));
+                Quaternion currentAngle = HoverEffect.Instance.ReturnAngle();
+                HoverEffect.Instance.SetAngle(Quaternion.Lerp(currentAngle, Quaternion.Euler(0, 0, building.GetRotationAngle(dir)), 0.1f));
+            }
         }
     }
 }

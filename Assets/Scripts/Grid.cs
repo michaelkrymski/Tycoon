@@ -48,6 +48,22 @@ public class Grid<TGridObject>
 
     }
 
+    public void CreateGridLines()
+    {
+        GameObject gridLines = new GameObject("GridLines");
+        gridLines.transform.position = origin;
+        LineRenderer lines = gridLines.AddComponent<LineRenderer>();
+        lines.material = (Material)Resources.Load("GridMat", typeof(Material));
+        lines.startColor = Color.white;
+        lines.startWidth = 0.1f;
+        lines.positionCount = 5;
+        lines.SetPosition(0, GetWorldPosition(0, 0));
+        lines.SetPosition(1, GetWorldPosition(width, 0));
+        lines.SetPosition(2, GetWorldPosition(width, height));
+        lines.SetPosition(3, GetWorldPosition(0, height));
+        lines.SetPosition(4, GetWorldPosition(0, 0));
+    }
+
     public void TriggerUpdate(int x, int y)
     {
         debugTextArray[x, y].text = gridArray[x, y].ToString();
