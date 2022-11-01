@@ -11,7 +11,9 @@ public class Grid<TGridObject>
     private Vector3 origin;
     private TGridObject[,] gridArray;
     private TextMesh[,] debugTextArray;
+    private GameObject gridBorderLines;
     private GameObject gridLines;
+    private bool debug;
 
     // Constructor
     public Grid(int width, int height, float cellSize, Vector3 origin, Func<int, int, Grid<TGridObject>, TGridObject> createGridObject)
@@ -21,6 +23,7 @@ public class Grid<TGridObject>
         this.cellSize = cellSize;
         this.origin = origin;
         gridArray = new TGridObject[width, height];
+        debug = false;
 
         for(int x = 0; x < gridArray.GetLength(0); x++)
         {
@@ -30,7 +33,6 @@ public class Grid<TGridObject>
             }
         }
 
-        bool debug = true;
         if(debug)
         {
             debugTextArray = new TextMesh[width, height];
@@ -49,29 +51,58 @@ public class Grid<TGridObject>
 
     }
 
-    public void CreateGridLines(int border)
+    public void CreateGridLines(int border, bool interior)
     {
-        gridLines = new GameObject("GridLines");
-        gridLines.transform.position = origin;
-        LineRenderer lines = gridLines.AddComponent<LineRenderer>();
-        lines.material = new Material(Shader.Find("Sprites/Default"));
-        lines.startColor = Color.white;
-        lines.startWidth = 0.3f;
-        lines.positionCount = 5;
-        // External lines
-        lines.SetPosition(0, GetWorldPosition(0, 0) + new Vector3(-border, -border));
-        lines.SetPosition(1, GetWorldPosition(width, 0) + new Vector3(border, -border));
-        lines.SetPosition(2, GetWorldPosition(width, height) + new Vector3(border, border));
-        lines.SetPosition(3, GetWorldPosition(0, height) + new Vector3(-border, border));
-        lines.SetPosition(4, GetWorldPosition(0, 0) + new Vector3(-border, -border));
-        // Internal lines
-        for (int x = 0; x < gridArray.GetLength(0); x++)
+        if(gridBorderLines == null)
         {
-            lines.positionCount += 2;
-            lines.SetPosition(lines.positionCount - 2, GetWorldPosition(x, 0) + new Vector3(0, -border));
-            lines.SetPosition(lines.positionCount - 1, GetWorldPosition(x, height) + new Vector3(0, border));
+            gridBorderLines = new GameObject("GridBorder");
+            gridBorderLines.transform.position = origin;
+            LineRenderer gridBorder = gridBorderLines.AddComponent<LineRenderer>();
+            gridBorder.material = new Material(Shader.Find("Sprites/Default"));
+            gridBorder.startColor = Color.white;
+            gridBorder.startWidth = 0.3f;
+            gridBorder.positionCount = 5;
+            // External lines
+            gridBorder.SetPosition(0, GetWorldPosition(0, 0) + new Vector3(-border, -border));
+            gridBorder.SetPosition(1, GetWorldPosition(width, 0) + new Vector3(border, -border));
+            gridBorder.SetPosition(2, GetWorldPosition(width, height) + new Vector3(border, border));
+            gridBorder.SetPosition(3, GetWorldPosition(0, height) + new Vector3(-border, border));
+            gridBorder.SetPosition(4, GetWorldPosition(0, 0) + new Vector3(-border, -border));
         }
+        // Internal lines
+        if(interior && gridLines == null)
+        {
+            gridLines = new GameObject("GridLines");
+            gridLines.transform.position = origin;
+            LineRenderer lines = gridLines.AddComponent<LineRenderer>();
+            lines.material = new Material(Shader.Find("Sprites/Default"));
+            lines.startColor = Color.white;
+            lines.startWidth = 0.3f;
+            lines.positionCount = GetWidth() * GetHeight() * 5 + GetWidth() * 2;
+            int iterations = 0;
 
+            for (int x = 0; x < GetWidth(); x++)
+            {
+                for (int y = 0; y < GetHeight(); y++)
+                {
+                    lines.SetPosition(iterations, GetWorldPosition(x, y));
+                    iterations++;
+                    lines.SetPosition(iterations, GetWorldPosition(x, y + 1));
+                    iterations++;
+                    lines.SetPosition(iterations, GetWorldPosition(x + 1, y + 1));
+                    iterations++;
+                    lines.SetPosition(iterations, GetWorldPosition(x + 1, y));
+                    iterations++;
+                    lines.SetPosition(iterations, GetWorldPosition(x, y));
+                    iterations++;
+                } // Five iterations per square. 
+
+                lines.SetPosition(iterations, GetWorldPosition(x, GetHeight()));
+                iterations++;
+                lines.SetPosition(iterations, GetWorldPosition(x + 1, GetHeight()));
+                iterations++;
+            } // Two iterations per column. 
+        }
     }
 
     public void DestroyGridLines()
@@ -81,7 +112,10 @@ public class Grid<TGridObject>
 
     public void TriggerUpdate(int x, int y)
     {
-        debugTextArray[x, y].text = gridArray[x, y].ToString();
+        if(debug)
+        {
+            debugTextArray[x, y].text = gridArray[x, y]?.ToString();
+        }
     }
 
     public Vector3 GetWorldPosition(int x, int y)

@@ -6,7 +6,8 @@ using CodeMonkey.Utils;
 
 public class GridBuilder : MonoBehaviour
 {
-    [SerializeField] BuildingData building;
+    [SerializeField] List<BuildingData> buildings;
+    private BuildingData building;
     private Grid<GridObject> grid;
     private BuildingData.Dir dir = default;
     private bool buildMode;
@@ -81,6 +82,21 @@ public class GridBuilder : MonoBehaviour
                 dir = BuildingData.GetNextDir(dir);
             }
 
+            if(Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                SetNextBuilding();
+            }
+
+            if(Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                SetNextBuilding(1);
+            }
+
+            if(Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                SetNextBuilding(2);
+            }
+
             SetHoverEffect();
         }
     }
@@ -90,7 +106,11 @@ public class GridBuilder : MonoBehaviour
         buildMode = !buildMode;
         if(buildMode)
         {
-            grid.CreateGridLines(5);
+            if(building == null)
+            {
+                SetNextBuilding();
+            }
+            grid.CreateGridLines(5, true);
         }
         else
         {
@@ -103,6 +123,11 @@ public class GridBuilder : MonoBehaviour
     {
 
         HoverEffect.Instance.ReturnPosition();
+    }
+
+    private void SetNextBuilding(int buildingNumber = 0)
+    {
+        building = buildings[buildingNumber];
     }
 
     private void Build()
