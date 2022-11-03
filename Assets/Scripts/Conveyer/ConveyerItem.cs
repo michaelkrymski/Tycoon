@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class ConveyerItem : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+    public static ConveyerItem Create(Vector3 worldPosition, ItemData item)
     {
-        
+        Transform conveyerItemTransform = Instantiate(item.itemPrefab, worldPosition, Quaternion.identity);
+
+        ConveyerItem conveyerItem = conveyerItemTransform.GetComponent<ConveyerItem>();
+
+        return conveyerItem;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void DestroySelf()
     {
-        
+        Destroy(gameObject);
+    }
+
+    public void MoveSelf(Vector3 worldPosition)
+    {
+        transform.position = worldPosition;
     }
 }

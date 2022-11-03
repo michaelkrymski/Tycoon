@@ -121,13 +121,13 @@ public class GridBuilder : MonoBehaviour
 
     void LateUpdate()
     {
-
         HoverEffect.Instance.ReturnPosition();
     }
 
     private void SetNextBuilding(int buildingNumber = 0)
     {
         building = buildings[buildingNumber];
+        HoverEffect.Instance.DestroyHoverEffect();
     }
 
     private void Build()

@@ -82,10 +82,16 @@ public class BuildingData : ScriptableObject
         }
         foreach(Vector2Int position in gridPositionList)
         {
-            if(position.x > gridWidth - (width - 1) || position.y > gridHeight - (height - 1))
+            if(position.x > gridWidth - (width) || position.y > gridHeight - (height - 1))
             {   
+                Debug.Log("-1");
                 return new List<Vector2Int>(){new Vector2Int(-1, -1)};
             }
+
+            // else if(position.x > gridWidth || position.y > gridHeight)
+            // {
+            //     return new List<Vector2Int>(){new Vector2Int(-1, -1)};
+            // }
         }
         return gridPositionList;
     }
