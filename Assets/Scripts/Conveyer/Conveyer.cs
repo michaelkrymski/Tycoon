@@ -25,8 +25,15 @@ public class Conveyer : MonoBehaviour
             {
                 Debug.Log("Found conveyer");
                 Conveyer conveyer = GetConveyer(position + possiblePosition);
-                nextConveyer = conveyer;
-                conveyerIndex = i;
+                if(CheckForConveyerPosition(conveyer))
+                {
+                    
+                }
+                if(GetIndexFromDir(GetDir()) == i)
+                {
+                    conveyerIndex = i;
+                    nextConveyer = conveyer;
+                }
             }
             i++;
         }
@@ -55,6 +62,63 @@ public class Conveyer : MonoBehaviour
     public BuildingData.Dir GetDir()
     {
         return dir;
+    }
+
+    public int GetIndexFromDir(BuildingData.Dir dir)
+    {
+        switch (dir)
+        {
+            case BuildingData.Dir.North:
+                return 0;
+            case BuildingData.Dir.East:
+                return 1;
+            case BuildingData.Dir.South:
+                return 2;
+            case BuildingData.Dir.West:
+                return 3;
+            default:
+                return 0;
+        }
+    }
+
+    public bool CheckForConveyerPosition(Conveyer conveyer)
+    {
+        int thisIndex = conveyer.GetConveyerIndex();
+        switch(conveyer.GetDir())
+        {
+            case BuildingData.Dir.North:
+                if(thisIndex == 2)
+                {
+                    return true;
+                }
+                break;
+            case BuildingData.Dir.East:
+                if(thisIndex == 3)
+                {
+                    return true;
+                }
+                break;
+            case BuildingData.Dir.South:
+                if(thisIndex == 0)
+                {
+                    return true;
+                }
+                break;
+            case BuildingData.Dir.West:
+                if(thisIndex == 1)
+                {
+                    return true;
+                }
+                break;
+            default:
+                return false;
+        }
+        return false;
+    }
+
+    public int GetConveyerIndex()
+    {
+        return conveyerIndex;
     }
 
     void Update()

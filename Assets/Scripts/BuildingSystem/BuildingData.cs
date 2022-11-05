@@ -69,6 +69,8 @@ public class BuildingData : ScriptableObject
         }
     }
 
+    
+
     public List<Vector2Int> GetGridPositionList(Vector2Int offset, Dir dir, int gridWidth, int gridHeight)
     {
         List<Vector2Int> gridPositionList = new List<Vector2Int>();
