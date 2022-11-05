@@ -20,6 +20,13 @@ public class HoverEffect : MonoBehaviour
             Destroy(currentObj.gameObject);
         }
         currentObj = Instantiate(hoverObj, pos, angle);
+        foreach(var component in currentObj.GetComponents<Component>())
+        {
+            if (!(component is Transform))
+            {
+                Destroy(component);
+            }
+        }
         currentObj.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.75f);
     }
 

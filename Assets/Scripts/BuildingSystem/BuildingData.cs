@@ -72,7 +72,20 @@ public class BuildingData : ScriptableObject
     public List<Vector2Int> GetGridPositionList(Vector2Int offset, Dir dir, int gridWidth, int gridHeight)
     {
         List<Vector2Int> gridPositionList = new List<Vector2Int>();
-        Vector2Int rotationOffset = GetRotationOffset(dir);
+        Vector2Int rotationOffset;
+        Vector2Int positionOffset = default;
+        if(width > 1 && height > 1)
+        {
+            rotationOffset = GetRotationOffset(dir);
+            positionOffset.x = width - 1;
+            positionOffset.y = height - 1;
+        }
+        else
+        {
+            rotationOffset = default;
+            positionOffset.x = 1;
+            positionOffset.y = 1;
+        }
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
@@ -82,16 +95,10 @@ public class BuildingData : ScriptableObject
         }
         foreach(Vector2Int position in gridPositionList)
         {
-            if(position.x > gridWidth - (width) || position.y > gridHeight - (height - 1))
+            if(position.x > gridWidth - positionOffset.x || position.y > gridHeight - positionOffset.y)
             {   
-                Debug.Log("-1");
                 return new List<Vector2Int>(){new Vector2Int(-1, -1)};
             }
-
-            // else if(position.x > gridWidth || position.y > gridHeight)
-            // {
-            //     return new List<Vector2Int>(){new Vector2Int(-1, -1)};
-            // }
         }
         return gridPositionList;
     }

@@ -156,7 +156,7 @@ public class GridBuilder : MonoBehaviour
         {
             if(gridObject.CanBuild())
             {
-                PlacedObject placedObject = PlacedObject.Create(pos + new Vector3(building.GetRotationOffset(dir).x, building.GetRotationOffset(dir).y, 0) * grid.GetCellSize(), new Vector2Int(x, y), dir, building, 10, 10);
+                PlacedObject placedObject = PlacedObject.Create(pos + new Vector3(building.GetRotationOffset(dir).x, building.GetRotationOffset(dir).y, 0) * grid.GetCellSize(), new Vector2Int(x, y), dir, building, 10, 10, this);
                 foreach(Vector2Int tile in list)
                 {
                     grid.GetGridObject(tile.x, tile.y).SetObject(placedObject);
@@ -222,6 +222,15 @@ public class GridBuilder : MonoBehaviour
                 HoverEffect.Instance.SetAngle(Quaternion.Lerp(currentAngle, Quaternion.Euler(0, 0, building.GetRotationAngle(dir)), 0.1f));
             }
         }
+    }
+
+    public PlacedObject GetPlacedObject(Vector2Int coordinate)
+    {
+        if(grid.GetGridObject(coordinate.x, coordinate.y) != null)
+        {
+            return grid.GetGridObject(coordinate.x, coordinate.y).GetPlacedObject();
+        }
+        return null;
     }
 }
 

@@ -4,56 +4,65 @@ using UnityEngine;
 
 public class Conveyer : MonoBehaviour
 {
-    private ConveyerItem beltItem;
-    private ConveyerManager conveyerManager;
+    private PlacedObject placedObject;
     private BuildingData.Dir dir;
-    private Conveyer conveyerInFront;
+    private Vector2Int position;
+    private Conveyer nextConveyer; 
+    private int conveyerIndex; // North, East, South, West.
+    private List<Vector2Int> possiblePositions = new List<Vector2Int>(){new Vector2Int(0, 1), new Vector2Int(1, 0), new Vector2Int(0, -1), new Vector2Int(-1, 0)};
+    public int myInt;
 
-    public void Create(BuildingData.Dir dir)
+    public void Create()
     {
-        this.dir = dir;
-    }
+        placedObject = GetComponent<PlacedObject>();
+        dir = placedObject.GetDir();
+        position = placedObject.GetOrigin();
 
-    private void Awake()
-    {
-        conveyerManager = ConveyerManager.Instance;
-    }
-
-    public Conveyer SetFront()
-    {  
-        if (conveyerInFront != null)
+        int i = 0;
+        foreach(Vector2Int possiblePosition in possiblePositions)
         {
-            SetFront(conveyerInFront);
-            return conveyerInFront;
-        }
-        return null;
-    }
-
-    public void SetFront(Conveyer backConveyer)
-    {
-        backConveyer.conveyerInFront = this;
-    }
-
-    private void Update()
-    {
-        if (beltItem != null && conveyerInFront.beltItem == null)
-        {
-            StartCoroutine(LerpPosition(conveyerInFront.transform.position, 1f));
+            if(CheckForConveyer(position + possiblePosition))
+            {
+                Debug.Log("Found conveyer");
+                Conveyer conveyer = GetConveyer(position + possiblePosition);
+                nextConveyer = conveyer;
+                conveyerIndex = i;
+            }
+            i++;
         }
     }
 
-    private IEnumerator LerpPosition(Vector2 targetPosition, float duration)
+    private bool CheckForConveyer(Vector2Int checkPos)
     {
-        float time = 0;
-        Vector2 startPosition = transform.position;
-        while (time < duration)
+        if(placedObject.GetBuilder().GetPlacedObject(checkPos) != null)
         {
-            transform.position = Vector2.Lerp(startPosition, targetPosition, time / duration);
-            time += Time.deltaTime;
-            yield return null;
+            return true;
         }
-        transform.position = targetPosition;
-        beltItem = null;
-        conveyerInFront.beltItem = beltItem;
+        return false;
+    }
+
+    private Conveyer GetConveyer(Vector2Int checkPos)
+    {
+        return placedObject.GetBuilder().GetPlacedObject(checkPos).GetComponent<Conveyer>();
+    }
+
+
+    public void SetConveyerAtPos(Conveyer newConveyer, int pos)
+    {
+        nextConveyer = newConveyer;
+    }
+
+    public BuildingData.Dir GetDir()
+    {
+        return dir;
+    }
+
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            List<string> nameList = new List<string>(){"North", "East", "South", "West"};
+            Debug.Log(myInt + " " + nameList[conveyerIndex] + ": " + nextConveyer);
+        }
     }
 }

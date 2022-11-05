@@ -9,8 +9,9 @@ public class PlacedObject : MonoBehaviour
     private BuildingData.Dir dir;
     private int gridWidth;
     private int gridHeight;
+    private GridBuilder gridBuilder;
 
-    public static PlacedObject Create(Vector3 worldPosition, Vector2Int origin, BuildingData.Dir dir, BuildingData building, int gridWidth, int gridHeight)
+    public static PlacedObject Create(Vector3 worldPosition, Vector2Int origin, BuildingData.Dir dir, BuildingData building, int gridWidth, int gridHeight, GridBuilder gridBuilder)
     {
         Transform placedObjectTransform = Instantiate(building.buildingPrefab, worldPosition, Quaternion.Euler(0, 0, building.GetRotationAngle(dir)));
 
@@ -20,6 +21,12 @@ public class PlacedObject : MonoBehaviour
         placedObject.dir = dir;
         placedObject.gridWidth = gridWidth;
         placedObject.gridHeight = gridHeight;
+        placedObject.gridBuilder = gridBuilder;
+
+        if(placedObject.building.buildingName == "Conveyer")
+        {
+            placedObject.GetComponent<Conveyer>().Create();
+        }
 
         return placedObject;
     }
@@ -28,6 +35,21 @@ public class PlacedObject : MonoBehaviour
     {
         List<Vector2Int> gridPositionList = building.GetGridPositionList(origin, dir, gridWidth, gridHeight);        
         return gridPositionList;
+    }
+
+    public BuildingData.Dir GetDir()
+    {
+        return dir;
+    }
+
+    public GridBuilder GetBuilder()
+    {
+        return gridBuilder;
+    }
+
+    public Vector2Int GetOrigin()
+    {
+        return origin;
     }
 
     public void DestroySelf()
