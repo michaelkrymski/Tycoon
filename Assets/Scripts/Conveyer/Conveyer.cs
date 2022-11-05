@@ -7,32 +7,36 @@ public class Conveyer : MonoBehaviour
     private PlacedObject placedObject;
     private BuildingData.Dir dir;
     private Vector2Int position;
-    private Conveyer nextConveyer; 
+    [SerializeField] private Conveyer nextConveyer; 
     private int conveyerIndex; // North, East, South, West.
     private List<Vector2Int> possiblePositions = new List<Vector2Int>(){new Vector2Int(0, 1), new Vector2Int(1, 0), new Vector2Int(0, -1), new Vector2Int(-1, 0)};
-    public int myInt;
+    [SerializeField] private static int myInt;
+    [SerializeField] private int myIntViewable;
+
+    private bool isOccupied;
 
     public void Create()
     {
+        myInt++;
+        myIntViewable = myInt;
         placedObject = GetComponent<PlacedObject>();
         dir = placedObject.GetDir();
         position = placedObject.GetOrigin();
 
-        int i = 0;
+        int i = 0; // North, East, South, West.
         foreach(Vector2Int possiblePosition in possiblePositions)
         {
             if(CheckForConveyer(position + possiblePosition))
             {
-                Debug.Log("Found conveyer");
                 Conveyer conveyer = GetConveyer(position + possiblePosition);
-                if(CheckForConveyerPosition(conveyer))
-                {
-                    
-                }
                 if(GetIndexFromDir(GetDir()) == i)
                 {
                     conveyerIndex = i;
                     nextConveyer = conveyer;
+                }
+                if(GetIndexFromDir(GetDir()) == (i + 2) % 4)
+                {
+                    conveyer.SetNextConveyer(this);
                 }
             }
             i++;
@@ -54,7 +58,7 @@ public class Conveyer : MonoBehaviour
     }
 
 
-    public void SetConveyerAtPos(Conveyer newConveyer, int pos)
+    public void SetNextConveyer(Conveyer newConveyer)
     {
         nextConveyer = newConveyer;
     }
@@ -81,44 +85,14 @@ public class Conveyer : MonoBehaviour
         }
     }
 
-    public bool CheckForConveyerPosition(Conveyer conveyer)
+    public bool IsOccupied()
     {
-        int thisIndex = conveyer.GetConveyerIndex();
-        switch(conveyer.GetDir())
-        {
-            case BuildingData.Dir.North:
-                if(thisIndex == 2)
-                {
-                    return true;
-                }
-                break;
-            case BuildingData.Dir.East:
-                if(thisIndex == 3)
-                {
-                    return true;
-                }
-                break;
-            case BuildingData.Dir.South:
-                if(thisIndex == 0)
-                {
-                    return true;
-                }
-                break;
-            case BuildingData.Dir.West:
-                if(thisIndex == 1)
-                {
-                    return true;
-                }
-                break;
-            default:
-                return false;
-        }
-        return false;
+        return isOccupied;
     }
 
-    public int GetConveyerIndex()
+    public Vector2Int GetPosition()
     {
-        return conveyerIndex;
+        return position;
     }
 
     void Update()
