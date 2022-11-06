@@ -52,6 +52,11 @@ public class PlacedObject : MonoBehaviour
         return origin;
     }
 
+    public Vector3 GetWorldPositionCentered()
+    {
+        return gridBuilder.GetGrid().GetWorldPositionCentralized(origin.x, origin.y);
+    }
+
     public void DestroySelf()
     {
         Destroy(gameObject);

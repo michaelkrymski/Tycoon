@@ -123,6 +123,11 @@ public class Grid<TGridObject>
         return new Vector3(x, y) * cellSize + origin;
     }
 
+    public Vector3 GetWorldPositionCentralized(int x, int y)
+    {
+        return new Vector3(x, y) * cellSize + origin + new Vector3(cellSize / 2, cellSize / 2);
+    }
+
     // Set the value of a grid cell using x, y format. 
     public void SetValue(int x, int y, TGridObject value)
     {

@@ -232,6 +232,11 @@ public class GridBuilder : MonoBehaviour
         }
         return null;
     }
+
+    public Grid<GridObject> GetGrid()
+    {
+        return grid;
+    }
 }
 
 /*
