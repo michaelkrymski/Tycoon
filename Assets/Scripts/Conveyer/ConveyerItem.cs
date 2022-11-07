@@ -16,9 +16,9 @@ public class ConveyerItem : MonoBehaviour
         return conveyerItem;
     }
 
-    public void DestroySelf()
+    public void DestroySelf(float delay = 0)
     {
-        Destroy(gameObject);
+        Destroy(gameObject, delay);
     }
 
     public void MoveSelf(Vector2 initialPosition, Vector2 worldPosition, int speed)

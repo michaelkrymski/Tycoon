@@ -97,6 +97,11 @@ public class GridBuilder : MonoBehaviour
                 SetNextBuilding(2);
             }
 
+            if(Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                SetNextBuilding(3);
+            }
+
             SetHoverEffect();
         }
     }
@@ -211,7 +216,7 @@ public class GridBuilder : MonoBehaviour
             if(HoverEffect.Instance.ReturnPosition() == Vector3.zero)
             {
                 Vector3 firstPos = grid.GetWorldPosition(x, y) + new Vector3(building.GetRotationOffset(dir).x, building.GetRotationOffset(dir).y, 0) * grid.GetCellSize();
-                HoverEffect.Instance.RefreshHoverEffect(building.buildingPrefab, firstPos, Quaternion.Euler(0, 0, building.GetRotationAngle(dir)));
+                HoverEffect.Instance.RefreshHoverEffect(building.buildingHoverPrefab, firstPos, Quaternion.Euler(0, 0, building.GetRotationAngle(dir)));
             }
             else
             {

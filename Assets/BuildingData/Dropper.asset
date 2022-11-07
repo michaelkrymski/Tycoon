@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e287deda5f0edb344a85e32b08e83358, type: 3}
-  m_Name: Test
+  m_Name: Dropper
   m_EditorClassIdentifier: 
-  buildingName: Test
-  buildingPrefab: {fileID: 5177980124995339948, guid: b7faaf16e1641764684f40d5c9e4bb09, type: 3}
-  width: 2
-  height: 2
+  buildingName: ItemDropper
+  buildingPrefab: {fileID: 4115024687473076210, guid: 3590a26c0ba800a499eee195ebf07d0f, type: 3}
+  buildingHoverPrefab: {fileID: 4115024687473076210, guid: 1fee8ef7e834ed349850edce5bb5145b, type: 3}
+  width: 1
+  height: 1

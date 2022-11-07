@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e287deda5f0edb344a85e32b08e83358, type: 3}
-  m_Name: Dropper
+  m_Name: Grabber
   m_EditorClassIdentifier: 
-  buildingName: ItemDropper
-  buildingPrefab: {fileID: 4115024687473076210, guid: 3590a26c0ba800a499eee195ebf07d0f, type: 3}
+  buildingName: Grabber
+  buildingPrefab: {fileID: 2916718210521849871, guid: ad9aac11a0a534a40a56202002cad25e, type: 3}
+  buildingHoverPrefab: {fileID: 2916718210521849871, guid: a4df970875c600e4d86a72d6a4880cef, type: 3}
   width: 1
   height: 1

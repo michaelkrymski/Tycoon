@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e287deda5f0edb344a85e32b08e83358, type: 3}
-  m_Name: Conveyer
+  m_Name: Test
   m_EditorClassIdentifier: 
-  buildingName: Conveyer
-  buildingPrefab: {fileID: 2163130293312430269, guid: 7185e9cf0fec56d43aa821ad7186a129, type: 3}
-  width: 1
-  height: 1
+  buildingName: Test
+  buildingPrefab: {fileID: 5177980124995339948, guid: b7faaf16e1641764684f40d5c9e4bb09, type: 3}
+  buildingHoverPrefab: {fileID: 5177980124995339948, guid: b7faaf16e1641764684f40d5c9e4bb09, type: 3}
+  width: 2
+  height: 2

@@ -14,7 +14,7 @@ public class Conveyer : MonoBehaviour
     public ConveyerItem currentItem;
     private int conveyerSpeed = 1;
 
-    private void Awake()
+    private void Start()
     {
         placedObject = GetComponent<PlacedObject>();
         dir = placedObject.GetDir();
@@ -69,9 +69,29 @@ public class Conveyer : MonoBehaviour
     {
         if(placedObject.GetBuilder().GetPlacedObject(checkPos) != null)
         {
-            return true;
+            if(placedObject.GetBuilder().GetPlacedObject(checkPos).GetComponent<Conveyer>() != null)
+            {
+                return true;
+            }
         }
         return false;
+    }
+
+    public static void CheckForExtras(Vector2Int checkPos, PlacedObject placedObject, out ItemDrop dropper, out ItemGrab grabber)
+    {
+        if(placedObject.GetBuilder().GetPlacedObject(checkPos))
+        {
+            if(placedObject.GetBuilder().GetPlacedObject(checkPos).GetComponent<ItemDrop>() != null)
+            {
+                dropper = placedObject.GetBuilder().GetPlacedObject(checkPos).GetComponent<ItemDrop>();
+            }
+            if(placedObject.GetBuilder().GetPlacedObject(checkPos).GetComponent<ItemGrab>() != null)
+            {
+                grabber = placedObject.GetBuilder().GetPlacedObject(checkPos).GetComponent<ItemGrab>();
+            }
+        }
+        dropper = null;
+        grabber = null;
     }
 
     public static Conveyer GetConveyer(Vector2Int checkPos, PlacedObject placedObject)
@@ -105,6 +125,11 @@ public class Conveyer : MonoBehaviour
             default:
                 return 0;
         }
+    }
+
+    public ConveyerItem GetItem()
+    {
+        return currentItem;
     }
 
     public bool ConveyerIsOccupied()

@@ -32,6 +32,7 @@ public class BuildingData : ScriptableObject
 
     public string buildingName;
     public Transform buildingPrefab;
+    public Transform buildingHoverPrefab;
     public int width;
     public int height;
 
