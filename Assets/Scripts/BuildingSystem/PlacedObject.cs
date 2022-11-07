@@ -23,11 +23,6 @@ public class PlacedObject : MonoBehaviour
         placedObject.gridHeight = gridHeight;
         placedObject.gridBuilder = gridBuilder;
 
-        if(placedObject.building.buildingName == "Conveyer")
-        {
-            placedObject.GetComponent<Conveyer>().Create();
-        }
-
         return placedObject;
     }
 

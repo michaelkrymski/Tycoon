@@ -9,18 +9,13 @@ public class Conveyer : MonoBehaviour
     private Vector2Int position;
     private Vector3 worldPositionCentered;
     [SerializeField] Conveyer nextConveyer; 
-    private List<Vector2Int> possiblePositions = new List<Vector2Int>(){new Vector2Int(0, 1), new Vector2Int(1, 0), new Vector2Int(0, -1), new Vector2Int(-1, 0)};
+    public static List<Vector2Int> possiblePositions = new List<Vector2Int>(){new Vector2Int(0, 1), new Vector2Int(1, 0), new Vector2Int(0, -1), new Vector2Int(-1, 0)};
 
     public ConveyerItem currentItem;
     private int conveyerSpeed = 1;
-    [SerializeField] ItemData itemData;
-    private static int myInt;
-    public int index;
 
-    public void Create()
+    private void Awake()
     {
-        myInt++;
-        index = myInt;
         placedObject = GetComponent<PlacedObject>();
         dir = placedObject.GetDir();
         position = placedObject.GetOrigin();
@@ -29,29 +24,9 @@ public class Conveyer : MonoBehaviour
         int i = 0; // North, East, South, West.
         foreach(Vector2Int possiblePosition in possiblePositions)
         {
-            if(CheckForConveyer(position + possiblePosition))
+            if(CheckForConveyer(position + possiblePosition, placedObject))
             {
-                Conveyer conveyer = GetConveyer(position + possiblePosition);
-                // if(GetIndexFromDir(conveyer.GetDir()) == i) // If the conveyer is placed in the same direction to this one.
-                // {
-                //     nextConveyer = conveyer;
-                // }
-                // Debug.Log(conveyer.GetDir() + " " + GetIndexFromDir(conveyer.GetDir()) + " " + (i + 2) % 4);
-                // if(GetIndexFromDir(conveyer.GetDir()) == (i + 2) % 4) // If the conveyer is placed in the opposite direction to this one.
-                // {
-                //     conveyer.SetNextConveyer(this);
-                //     Debug.Log("South");
-                // }
-                // else if(GetIndexFromDir(conveyer.GetDir()) == (i + 1) % 4) // If the conveyer is placed in the right direction to this one.
-                // {
-                //     conveyer.SetNextConveyer(this);
-                //     Debug.Log("East");
-                // }
-                // else if(GetIndexFromDir(conveyer.GetDir()) == (i + 3) % 4) // If the conveyer is palced in the left direction to this one.
-                // {
-                //     conveyer.SetNextConveyer(this);
-                //     Debug.Log("West");
-                // }
+                Conveyer conveyer = GetConveyer(position + possiblePosition, placedObject);
 
                 if(GetIndexFromDir(GetDir()) == i)
                 {
@@ -90,7 +65,7 @@ public class Conveyer : MonoBehaviour
         }
     }
 
-    private bool CheckForConveyer(Vector2Int checkPos)
+    public static bool CheckForConveyer(Vector2Int checkPos, PlacedObject placedObject)
     {
         if(placedObject.GetBuilder().GetPlacedObject(checkPos) != null)
         {
@@ -99,7 +74,7 @@ public class Conveyer : MonoBehaviour
         return false;
     }
 
-    private Conveyer GetConveyer(Vector2Int checkPos)
+    public static Conveyer GetConveyer(Vector2Int checkPos, PlacedObject placedObject)
     {
         return placedObject.GetBuilder().GetPlacedObject(checkPos).GetComponent<Conveyer>();
     }
@@ -115,7 +90,7 @@ public class Conveyer : MonoBehaviour
         return dir;
     }
 
-    public int GetIndexFromDir(BuildingData.Dir dir)
+    public static int GetIndexFromDir(BuildingData.Dir dir)
     {
         switch (dir)
         {
@@ -157,18 +132,16 @@ public class Conveyer : MonoBehaviour
         return nextConveyer;
     }
 
+    public int GetSpeed()
+    {
+        return conveyerSpeed;
+    }
+
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Space))
         {
             List<string> nameList = new List<string>(){"North", "East", "South", "West"};
-        }
-
-        if(Input.GetKeyDown(KeyCode.C) && !ConveyerIsOccupied())
-        {
-            ConveyerItem item = ConveyerItem.Create(transform.position, itemData);
-            currentItem = item;
-            SetItem(item);
         }
 
         if(GetNextConveyer() != null)
