@@ -21,10 +21,10 @@ public class ConveyerItem : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void MoveSelf(Vector3 worldPosition, int speed)
+    public void MoveSelf(Vector2 initialPosition, Vector2 worldPosition, int speed)
     {
         isMoving = true;
-        StartCoroutine(MoveItem(worldPosition, speed));
+        StartCoroutine(MoveItem(initialPosition, worldPosition, speed));
     }
 
     public void SetCurrentConveyer(Conveyer conveyer)
@@ -42,9 +42,10 @@ public class ConveyerItem : MonoBehaviour
         return isMoving;
     }
 
-    private IEnumerator MoveItem(Vector2 targetPosition, float duration)
+    private IEnumerator MoveItem(Vector2 initialPosition, Vector2 targetPosition, float duration)
     {
         float time = 0;
+        transform.position = initialPosition;
         Vector3 startPosition = new Vector3(transform.position.x, transform.position.y, -1);
         Vector3 newTargetPosition = new Vector3(targetPosition.x, targetPosition.y, -1);
         while (time < duration)

@@ -9,7 +9,6 @@ public class Conveyer : MonoBehaviour
     private Vector2Int position;
     private Vector3 worldPositionCentered;
     [SerializeField] Conveyer nextConveyer; 
-    private int conveyerIndex; // North, East, South, West.
     private List<Vector2Int> possiblePositions = new List<Vector2Int>(){new Vector2Int(0, 1), new Vector2Int(1, 0), new Vector2Int(0, -1), new Vector2Int(-1, 0)};
 
     public ConveyerItem currentItem;
@@ -33,26 +32,58 @@ public class Conveyer : MonoBehaviour
             if(CheckForConveyer(position + possiblePosition))
             {
                 Conveyer conveyer = GetConveyer(position + possiblePosition);
-                if(GetIndexFromDir(conveyer.GetDir()) == i) // If the conveyer is placed in the same direction to this one.
+                // if(GetIndexFromDir(conveyer.GetDir()) == i) // If the conveyer is placed in the same direction to this one.
+                // {
+                //     nextConveyer = conveyer;
+                // }
+                // Debug.Log(conveyer.GetDir() + " " + GetIndexFromDir(conveyer.GetDir()) + " " + (i + 2) % 4);
+                // if(GetIndexFromDir(conveyer.GetDir()) == (i + 2) % 4) // If the conveyer is placed in the opposite direction to this one.
+                // {
+                //     conveyer.SetNextConveyer(this);
+                //     Debug.Log("South");
+                // }
+                // else if(GetIndexFromDir(conveyer.GetDir()) == (i + 1) % 4) // If the conveyer is placed in the right direction to this one.
+                // {
+                //     conveyer.SetNextConveyer(this);
+                //     Debug.Log("East");
+                // }
+                // else if(GetIndexFromDir(conveyer.GetDir()) == (i + 3) % 4) // If the conveyer is palced in the left direction to this one.
+                // {
+                //     conveyer.SetNextConveyer(this);
+                //     Debug.Log("West");
+                // }
+
+                if(GetIndexFromDir(GetDir()) == i)
                 {
-                    conveyerIndex = i;
-                    nextConveyer = conveyer;
+                    SetNextConveyer(conveyer);
                 }
-                Debug.Log(conveyer.GetDir() + " " + GetIndexFromDir(conveyer.GetDir()) + " " + (i + 2) % 4);
-                if(GetIndexFromDir(conveyer.GetDir()) == (i + 2) % 4) // If the conveyer is placed in the opposite direction to this one.
+
+                switch(i)
                 {
-                    conveyer.SetNextConveyer(this);
-                    Debug.Log("South");
-                }
-                else if(GetIndexFromDir(conveyer.GetDir()) == (i + 1) % 4) // If the conveyer is placed in the right direction to this one.
-                {
-                    conveyer.SetNextConveyer(this);
-                    Debug.Log("East");
-                }
-                else if(GetIndexFromDir(conveyer.GetDir()) == (i + 3) % 4) // If the conveyer is palced in the left direction to this one.
-                {
-                    conveyer.SetNextConveyer(this);
-                    Debug.Log("West");
+                    case 0:
+                        if(conveyer.GetDir() == BuildingData.Dir.South)
+                        {
+                            conveyer.SetNextConveyer(this);
+                        }
+                        break;
+                    case 1:
+                        if(conveyer.GetDir() == BuildingData.Dir.West)
+                        {
+                            conveyer.SetNextConveyer(this);
+                        }
+                        break;
+                    case 2:
+                        if(conveyer.GetDir() == BuildingData.Dir.North)
+                        {
+                            conveyer.SetNextConveyer(this);
+                        }
+                        break;
+                    case 3:
+                        if(conveyer.GetDir() == BuildingData.Dir.East)
+                        {
+                            conveyer.SetNextConveyer(this);
+                        }
+                        break;
                 }
             }
             i++;
@@ -131,7 +162,6 @@ public class Conveyer : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space))
         {
             List<string> nameList = new List<string>(){"North", "East", "South", "West"};
-            Debug.Log(nameList[conveyerIndex] + ": " + nextConveyer);
         }
 
         if(Input.GetKeyDown(KeyCode.C) && !ConveyerIsOccupied())
@@ -146,7 +176,7 @@ public class Conveyer : MonoBehaviour
             if(ConveyerIsOccupied() && !nextConveyer.ConveyerIsOccupied() && !currentItem.GetIsMoving())
             {
                 currentItem.SetCurrentConveyer(this);
-                currentItem.MoveSelf(nextConveyer.GetWorldPositionCentered(), conveyerSpeed);
+                currentItem.MoveSelf(GetWorldPositionCentered(), nextConveyer.GetWorldPositionCentered(), conveyerSpeed);
                 nextConveyer.SetItem(currentItem);
                 RemoveItem();
             }
