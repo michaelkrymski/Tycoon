@@ -62,6 +62,16 @@ public class Conveyer : MonoBehaviour
                 }
             }
             i++;
+
+            CheckForExtras(position + possiblePosition, placedObject, out ItemDrop dropper, out ItemGrab grabber);
+            if(dropper != null)
+            {
+                dropper.LateStart();
+            }
+            if(grabber != null)
+            {
+                grabber.LateStart();
+            }
         }
     }
 
@@ -79,19 +89,30 @@ public class Conveyer : MonoBehaviour
 
     public static void CheckForExtras(Vector2Int checkPos, PlacedObject placedObject, out ItemDrop dropper, out ItemGrab grabber)
     {
-        if(placedObject.GetBuilder().GetPlacedObject(checkPos))
+        if(placedObject.GetBuilder().GetPlacedObject(checkPos) != null)
         {
             if(placedObject.GetBuilder().GetPlacedObject(checkPos).GetComponent<ItemDrop>() != null)
             {
                 dropper = placedObject.GetBuilder().GetPlacedObject(checkPos).GetComponent<ItemDrop>();
             }
+            else
+            {
+                dropper = null;
+            }
             if(placedObject.GetBuilder().GetPlacedObject(checkPos).GetComponent<ItemGrab>() != null)
             {
                 grabber = placedObject.GetBuilder().GetPlacedObject(checkPos).GetComponent<ItemGrab>();
             }
+            else
+            {
+                grabber = null;
+            }
         }
-        dropper = null;
-        grabber = null;
+        else
+        {
+            dropper = null;
+            grabber = null;
+        }
     }
 
     public static Conveyer GetConveyer(Vector2Int checkPos, PlacedObject placedObject)

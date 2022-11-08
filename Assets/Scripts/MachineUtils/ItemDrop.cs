@@ -26,6 +26,11 @@ public class ItemDrop : MonoBehaviour
         }
     }
 
+    public void LateStart()
+    {
+        Start();
+    }
+
     private void Update()
     {
         if(!isDispensing && nextConveyer != null)

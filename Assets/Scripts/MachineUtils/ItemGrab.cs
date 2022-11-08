@@ -21,8 +21,13 @@ public class ItemGrab : MonoBehaviour
 
         if(Conveyer.CheckForConveyer(position + Conveyer.possiblePositions[(Conveyer.GetIndexFromDir(dir) + 2) % 4], placedObject))
         {
-            previousConveyer = Conveyer.GetConveyer(position + Conveyer.possiblePositions[Conveyer.GetIndexFromDir(dir) - 2], placedObject);
+            previousConveyer = Conveyer.GetConveyer(position + Conveyer.possiblePositions[(Conveyer.GetIndexFromDir(dir) + 2) % 4], placedObject);
         }
+    }
+
+    public void LateStart()
+    {
+        Start();
     }
 
     private void Update()
@@ -31,7 +36,7 @@ public class ItemGrab : MonoBehaviour
         {
             if(previousConveyer.ConveyerIsOccupied())
             {
-                if(!isDestroying)
+                if(!isDestroying && !previousConveyer.GetItem().GetIsMoving())
                 {
                     item = previousConveyer.GetItem();
                     item.MoveSelf(previousConveyer.GetWorldPositionCentered(), worldPositionCentered, previousConveyer.GetSpeed());
@@ -45,6 +50,7 @@ public class ItemGrab : MonoBehaviour
     {
         float time = 0;
         isDestroying = true;
+        previousConveyer.RemoveItem();
         while(time < previousConveyer.GetSpeed())
         {
             time += Time.deltaTime;
@@ -52,7 +58,6 @@ public class ItemGrab : MonoBehaviour
         }
         item.DestroySelf();
         item = null;
-        previousConveyer.RemoveItem();
         itemCount++;
         isDestroying = false;
     }
