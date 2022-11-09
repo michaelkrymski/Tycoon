@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb6a96bff2e2d9c4190619a6a5198c2f, type: 3}
+  m_Name: Test
+  m_EditorClassIdentifier: 
+  recipeName: Test
+  ingredients:
+  - {fileID: 11400000, guid: 091ed33296154aa4eae1c9d21de1578c, type: 2}
+  ingredientAmounts: 01000000
+  results:
+  - {fileID: 11400000, guid: 672952465fb63bd45b99227fbd82b404, type: 2}
+  resultAmounts: 00000000
+  craftingTime: 0
+  isCraftable: 0
+  isSmeltable: 0

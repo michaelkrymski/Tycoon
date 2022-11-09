@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemDrop : MonoBehaviour
+public class M_ItemDrop : MonoBehaviour
 {
     private BuildingData.Dir dir;
-    [SerializeField] private int itemCount = 10;
     private Conveyer nextConveyer;
     [SerializeField] private ItemData item;
     private bool isDispensing;
@@ -16,8 +15,8 @@ public class ItemDrop : MonoBehaviour
 
     private void Start()
     {
-        PlacedObject placedObject = GetComponent<PlacedObject>();
-        inventory = GetComponent<MachineInventory>();
+        PlacedObject placedObject = GetComponentInParent<PlacedObject>();
+        inventory = GetComponentInParent<MachineInventory>();
         dir = placedObject.GetDir();
         position = placedObject.GetOrigin();
         worldPositionCentered = placedObject.GetWorldPositionCentered();
@@ -39,10 +38,10 @@ public class ItemDrop : MonoBehaviour
         {
             if(!nextConveyer.ConveyerIsOccupied())
             {
-                if(itemCount > 0)
+                if(inventory.GetAmountOfItem(item) > 0)
                 {
                     StartCoroutine(DispenseItem(dispenseSpeed));
-                    itemCount--;
+                    inventory.DecreaseItem(item);
                 }
             }
         }

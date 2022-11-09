@@ -5,16 +5,17 @@ using UnityEngine;
 public class ItemGrab : MonoBehaviour
 {
     private BuildingData.Dir dir;
-    [SerializeField] private int itemCount;
     private Conveyer previousConveyer;
     [SerializeField] private ConveyerItem item;
     private Vector2Int position;
     private Vector3 worldPositionCentered;
     private bool isDestroying;
+    private MachineInventory inventory;
 
     private void Start()
     {
         PlacedObject placedObject = GetComponent<PlacedObject>();
+        inventory = GetComponent<MachineInventory>();
         dir = placedObject.GetDir();
         position = placedObject.GetOrigin();
         worldPositionCentered = placedObject.GetWorldPositionCentered();
@@ -56,9 +57,9 @@ public class ItemGrab : MonoBehaviour
             time += Time.deltaTime;
             yield return null;
         }
+        inventory.AddInventory(item.GetItem());
         item.DestroySelf();
         item = null;
-        itemCount++;
         isDestroying = false;
     }
 }

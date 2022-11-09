@@ -6,13 +6,14 @@ public class ConveyerItem : MonoBehaviour
 {
     private bool isMoving;
     private Conveyer currentConveyer;
+    private ItemData itemType;
     
     public static ConveyerItem Create(Vector3 worldPosition, ItemData item)
     {
         Transform conveyerItemTransform = Instantiate(item.itemPrefab, worldPosition, Quaternion.identity);
-
         ConveyerItem conveyerItem = conveyerItemTransform.GetComponent<ConveyerItem>();
 
+        conveyerItem.SetItem(item);
         return conveyerItem;
     }
 
@@ -40,6 +41,16 @@ public class ConveyerItem : MonoBehaviour
     public bool GetIsMoving()
     {
         return isMoving;
+    }
+
+    public void SetItem(ItemData item)
+    {
+        itemType = item;
+    }
+
+    public ItemData GetItem()
+    {
+        return itemType;
     }
 
     private IEnumerator MoveItem(Vector2 initialPosition, Vector2 targetPosition, float duration)

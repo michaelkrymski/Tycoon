@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2916718210521849871}
   - component: {fileID: 6710456199947400149}
   - component: {fileID: -9069548592471799852}
+  - component: {fileID: 1899140596922583577}
   m_Layer: 0
   m_Name: Grabber
   m_TagString: Untagged
@@ -58,8 +59,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dc7b671b0ee2094ab24f4a6debe20fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemCount: 0
   item: {fileID: 0}
+--- !u!114 &1899140596922583577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1317576380206451113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8186175cca0c524db4b0c9f1eff7950, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4076367285104893651
 GameObject:
   m_ObjectHideFlags: 0
