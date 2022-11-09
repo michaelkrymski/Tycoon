@@ -18,7 +18,7 @@ MonoBehaviour:
   ingredientAmounts: 01000000
   results:
   - {fileID: 11400000, guid: 672952465fb63bd45b99227fbd82b404, type: 2}
-  resultAmounts: 00000000
-  craftingTime: 0
-  isCraftable: 0
-  isSmeltable: 0
+  resultAmounts: 01000000
+  craftingTime: 3
+  isCraftable: 1
+  isSmeltable: 1

@@ -7,4 +7,5 @@ public class ItemData : ScriptableObject
 {
     public string itemName;
     public Transform itemPrefab;
+    public int maxStackSize;
 }

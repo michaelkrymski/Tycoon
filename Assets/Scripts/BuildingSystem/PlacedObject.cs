@@ -47,9 +47,9 @@ public class PlacedObject : MonoBehaviour
         return origin;
     }
 
-    public Vector3 GetWorldPositionCentered()
+    public Vector3 GetWorldPositionCentered(Vector2Int offset = default)
     {
-        return gridBuilder.GetGrid().GetWorldPositionCentralized(origin.x, origin.y);
+        return gridBuilder.GetGrid().GetWorldPositionCentralized(origin.x + offset.x, origin.y + offset.y);
     }
 
     public void DestroySelf()

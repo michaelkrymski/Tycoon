@@ -23,6 +23,7 @@ public class ItemGrab : MonoBehaviour
         if(Conveyer.CheckForConveyer(position + Conveyer.possiblePositions[(Conveyer.GetIndexFromDir(dir) + 2) % 4], placedObject))
         {
             previousConveyer = Conveyer.GetConveyer(position + Conveyer.possiblePositions[(Conveyer.GetIndexFromDir(dir) + 2) % 4], placedObject);
+            Debug.Log("test");
         }
     }
 
@@ -41,7 +42,7 @@ public class ItemGrab : MonoBehaviour
                 {
                     item = previousConveyer.GetItem();
                     item.MoveSelf(previousConveyer.GetWorldPositionCentered(), worldPositionCentered, previousConveyer.GetSpeed());
-                    StartCoroutine(DestroyItem());
+                        StartCoroutine(DestroyItem());
                 }
             }
         }

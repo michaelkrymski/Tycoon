@@ -63,7 +63,7 @@ public class Conveyer : MonoBehaviour
             }
             i++;
 
-            CheckForExtras(position + possiblePosition, placedObject, out ItemDrop dropper, out ItemGrab grabber);
+            CheckForExtras(position + possiblePosition, placedObject, out M_ItemDrop mDropper, out M_ItemGrab mGrabber, out ItemDrop dropper, out ItemGrab grabber);
             if(dropper != null)
             {
                 dropper.LateStart();
@@ -71,6 +71,14 @@ public class Conveyer : MonoBehaviour
             if(grabber != null)
             {
                 grabber.LateStart();
+            }
+            if(mDropper != null)
+            {
+                mDropper.LateStart();
+            }
+            if(mGrabber != null)
+            {
+                mGrabber.LateStart();
             }
         }
     }
@@ -87,32 +95,69 @@ public class Conveyer : MonoBehaviour
         return false;
     }
 
-    public static void CheckForExtras(Vector2Int checkPos, PlacedObject placedObject, out ItemDrop dropper, out ItemGrab grabber)
+    public static void CheckForExtras(Vector2Int checkPos, PlacedObject placedObject, out M_ItemDrop mDropper, out M_ItemGrab mGrabber, out ItemDrop dropper, out ItemGrab grabber)
     {
         if(placedObject.GetBuilder().GetPlacedObject(checkPos) != null)
         {
-            if(placedObject.GetBuilder().GetPlacedObject(checkPos).GetComponent<ItemDrop>() != null)
-            {
-                dropper = placedObject.GetBuilder().GetPlacedObject(checkPos).GetComponent<ItemDrop>();
-            }
-            else
+            if(placedObject.GetBuilder().GetPlacedObject(checkPos).GetComponent<MachineInventory>() != null)
             {
                 dropper = null;
-            }
-            if(placedObject.GetBuilder().GetPlacedObject(checkPos).GetComponent<ItemGrab>() != null)
-            {
-                grabber = placedObject.GetBuilder().GetPlacedObject(checkPos).GetComponent<ItemGrab>();
+                grabber = null;
+                if(placedObject.GetBuilder().GetPlacedObject(checkPos).GetComponentInChildren<M_ItemDrop>() != null)
+                {
+                    mDropper = placedObject.GetBuilder().GetPlacedObject(checkPos).GetComponentInChildren<M_ItemDrop>();
+                }
+                else
+                {
+                    mDropper = null;
+                }
+                if(placedObject.GetBuilder().GetPlacedObject(checkPos).GetComponentInChildren<M_ItemGrab>() != null)
+                {
+                    mGrabber = placedObject.GetBuilder().GetPlacedObject(checkPos).GetComponentInChildren<M_ItemGrab>();
+                }
+                else
+                {
+                    mGrabber = null;
+                }
             }
             else
             {
-                grabber = null;
+                mDropper = null;
+                mGrabber = null;
+                if(placedObject.GetBuilder().GetPlacedObject(checkPos).GetComponent<ItemDrop>() != null)
+                {
+                    dropper = placedObject.GetBuilder().GetPlacedObject(checkPos).GetComponent<ItemDrop>();
+                }
+                else
+                {
+                    dropper = null;
+                }
+                if(placedObject.GetBuilder().GetPlacedObject(checkPos).GetComponent<ItemGrab>() != null)
+                {
+                    grabber = placedObject.GetBuilder().GetPlacedObject(checkPos).GetComponent<ItemGrab>();
+                }
+                else
+                {
+                    grabber = null;
+                }
             }
         }
         else
         {
             dropper = null;
             grabber = null;
+            mDropper = null;
+            mGrabber = null;
         }
+    }
+
+    public static PlacedObject CheckOneSpot(Vector2Int checkPos, PlacedObject placedObject)
+    {
+        if(placedObject.GetBuilder().GetPlacedObject(checkPos) != null)
+        {
+            return placedObject.GetBuilder().GetPlacedObject(checkPos);
+        }
+        return null;
     }
 
     public static Conveyer GetConveyer(Vector2Int checkPos, PlacedObject placedObject)

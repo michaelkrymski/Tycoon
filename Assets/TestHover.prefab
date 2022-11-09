@@ -10,8 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4928266908093354105}
   - component: {fileID: 4928266908093354110}
-  - component: {fileID: 6874992495241943021}
-  - component: {fileID: 8540922943914096688}
   m_Layer: 0
   m_Name: TestBuilding
   m_TagString: Untagged
@@ -86,32 +84,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6874992495241943021
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4928266908093354111}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bae458bbfe6640f4fb3ca6e3c6411cbc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  item: {fileID: 0}
---- !u!114 &8540922943914096688
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4928266908093354111}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0b281b9b55ff354bbf122641fc2b6a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  item: {fileID: 0}
 --- !u!1 &6294180423917082606
 GameObject:
   m_ObjectHideFlags: 0
@@ -121,11 +93,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5177980124995339948}
-  - component: {fileID: 4948947146962883445}
-  - component: {fileID: 7000878433075906823}
-  - component: {fileID: 501884782937719380}
   m_Layer: 0
-  m_Name: Test
+  m_Name: TestHover
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -147,41 +116,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4948947146962883445
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6294180423917082606}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84bdbc32b6c3bd645b61b1223c05c9b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &7000878433075906823
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6294180423917082606}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8186175cca0c524db4b0c9f1eff7950, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemCounts: 
---- !u!114 &501884782937719380
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6294180423917082606}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0b75fd367c12dd47b0829383deaa58d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  selectedRecipe: {fileID: 11400000, guid: bf46a7f021759ad448da2dea1dded7f6, type: 2}

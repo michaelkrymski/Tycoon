@@ -7,18 +7,22 @@ public class MachineInventory : MonoBehaviour
 {
     private Dictionary<ItemData, int> inventory = new Dictionary<ItemData, int>();
     [SerializeField] private List<int> itemCounts;
+    private List<ItemData> products;
 
     private void Awake()
     {
-        SetupInventory(2, new ItemData[]{ItemManager.GetItemAtIndex("BlackSquareTest"), ItemManager.GetItemAtIndex("RedSquareTest")});
+        //SetupInventory(2, new ItemData[]{ItemManager.GetItemAtIndex("BlackSquareTest"), ItemManager.GetItemAtIndex("RedSquareTest")}, new ItemData[]{});
     }
 
-    private void SetupInventory(int ingredientCount, ItemData[] ingredients)
+    public void SetupInventory(ItemData[] ingredients, ItemData[] products)
     {
         itemCounts = new List<int>{};
-        for (int i = 0; i < ingredientCount; i++)
+        this.products = products.ToList();
+        ItemData[] allItems = ingredients.Concat(products).ToArray();
+        int itemCount = allItems.Length;
+        for (int i = 0; i < itemCount; i++)
         {
-            inventory.Add(ingredients[i], 0);
+            inventory.Add(allItems[i], 0);
             itemCounts.Add(0);
         }
     }
@@ -40,6 +44,11 @@ public class MachineInventory : MonoBehaviour
         UpdateDebug(item);
     }
 
+    public bool GetIsFull(ItemData item, int amount = 1)
+    {
+        return inventory[item] + amount > item.maxStackSize;
+    }
+
     public void UpdateDebug(ItemData item)
     {
         foreach(ItemData key in inventory.Keys)
@@ -49,5 +58,15 @@ public class MachineInventory : MonoBehaviour
                 itemCounts[inventory.Keys.ToList().IndexOf(item)] = inventory[key];
             }
         }
+    }
+
+    public ItemData GetNextProduct(int index)
+    {
+        return products[index];
+    }
+
+    public int GetProductCount()
+    {
+        return products.Count;
     }
 }

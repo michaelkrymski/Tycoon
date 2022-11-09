@@ -5,13 +5,14 @@ using UnityEngine;
 public class M_ItemDrop : MonoBehaviour
 {
     private BuildingData.Dir dir;
-    private Conveyer nextConveyer;
+    private Conveyer[] nextConveyers;
     [SerializeField] private ItemData item;
     private bool isDispensing;
     private int dispenseSpeed;
     private Vector2Int position;
     private Vector3 worldPositionCentered;
     private MachineInventory inventory;
+    private int productIndex;
 
     private void Start()
     {
@@ -20,10 +21,16 @@ public class M_ItemDrop : MonoBehaviour
         dir = placedObject.GetDir();
         position = placedObject.GetOrigin();
         worldPositionCentered = placedObject.GetWorldPositionCentered();
+        nextConveyers = new Conveyer[2];
 
-        if(Conveyer.CheckForConveyer(position + Conveyer.possiblePositions[Conveyer.GetIndexFromDir(dir)], placedObject))
+        int i = 0;
+        foreach(Vector2Int possiblePosition in Conveyer.possiblePositions)
         {
-            nextConveyer = Conveyer.GetConveyer(position + Conveyer.possiblePositions[Conveyer.GetIndexFromDir(dir)], placedObject);
+            if(Conveyer.CheckForConveyer(position + possiblePosition, placedObject))
+            {
+                nextConveyers[i] = Conveyer.GetConveyer(position + possiblePosition, placedObject);
+                i++;
+            }
         }
     }
 
@@ -34,26 +41,41 @@ public class M_ItemDrop : MonoBehaviour
 
     private void Update()
     {
-        if(!isDispensing && nextConveyer != null)
+        foreach(Conveyer nextConveyer in nextConveyers)
         {
-            if(!nextConveyer.ConveyerIsOccupied())
+            if(!isDispensing && nextConveyer != null)
             {
-                if(inventory.GetAmountOfItem(item) > 0)
+                if(!nextConveyer.ConveyerIsOccupied())
                 {
-                    StartCoroutine(DispenseItem(dispenseSpeed));
-                    inventory.DecreaseItem(item);
+                    if(item != null)
+                    {
+                        if(inventory.GetAmountOfItem(item) > 0)
+                        {
+                            StartCoroutine(DispenseItem(dispenseSpeed, nextConveyer));
+                            inventory.DecreaseItem(item);
+                        }
+                        else
+                        {
+                            item = null;
+                        }
+                    }
+                    else
+                    {
+                        item = inventory.GetNextProduct(productIndex);
+                        productIndex %= 1 + inventory.GetProductCount();
+                    }
                 }
             }
         }
     }
 
-    private IEnumerator DispenseItem(float duration)
+    private IEnumerator DispenseItem(float duration, Conveyer conveyer)
     {
         float time = 0;
         isDispensing = true;
         ConveyerItem newItem = ConveyerItem.Create(transform.position, item);
-        newItem.MoveSelf(worldPositionCentered, nextConveyer.GetWorldPositionCentered(), nextConveyer.GetSpeed());
-        nextConveyer.SetItem(newItem);
+        newItem.MoveSelf(worldPositionCentered, conveyer.GetWorldPositionCentered(), conveyer.GetSpeed());
+        conveyer.SetItem(newItem);
         while(time < duration)
         {
             time += Time.deltaTime;

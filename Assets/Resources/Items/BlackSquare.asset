@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: BlackSquareTest
   itemPrefab: {fileID: 1956124273568307308, guid: a11f85aeeb29ade4cadc8622181d8a6e, type: 3}
+  maxStackSize: 10

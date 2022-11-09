@@ -70,7 +70,22 @@ public class BuildingData : ScriptableObject
         }
     }
 
-    
+    public static Vector2Int GetComponentOffset(Dir dir)
+    {
+        switch(dir)
+        {
+            case Dir.North:
+                return new Vector2Int(0, 1);
+            case Dir.East:
+                return new Vector2Int(1, 0);
+            case Dir.South:
+                return new Vector2Int(0, -1);
+            case Dir.West:
+                return new Vector2Int(-1, 0);
+            default:
+                return new Vector2Int(0, 0);
+        }
+    }
 
     public List<Vector2Int> GetGridPositionList(Vector2Int offset, Dir dir, int gridWidth, int gridHeight)
     {
